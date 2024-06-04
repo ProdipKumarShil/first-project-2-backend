@@ -8,24 +8,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./app"));
-const config_1 = __importDefault(require("./app/config"));
-const mongoose_1 = __importDefault(require("mongoose"));
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield mongoose_1.default.connect('mongodb://localhost:27017');
-            app_1.default.listen(config_1.default.port, () => {
-                console.log("app listning on port", config_1.default.port);
-            });
-        }
-        catch (err) {
-            console.log(err);
-        }
-    });
-}
-main();
+exports.StudentController = void 0;
+const student_service_1 = require("./student.service");
+const createStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const student = req.body;
+        // will call service func to send this data
+        const result = yield student_service_1.StudentServices.createStudentIntoDB(student);
+        // send response
+        res.status(200).json({
+            success: true,
+            message: 'Student is created successfully',
+            data: result,
+        });
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
+exports.StudentController = {
+    createStudent,
+};
